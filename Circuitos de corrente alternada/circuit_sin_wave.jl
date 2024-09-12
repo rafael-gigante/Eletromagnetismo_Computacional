@@ -2,12 +2,13 @@ include("CircuitSim.jl")
 using .CircuitSim
 
 # Parameters of the circuit
-C = 1e-3    # Capacitance (F)
-R = 100.0     # Resistance (Ω)
+C = 1e-6   # Capacitance (F)
+R = 10.0     # Resistance (Ω)
 L = 1e-3     # Inductance (H)
-V₀ = 10.0   # Voltage amplitude (V)
+V₀ = 5.0   # Voltage amplitude (V)
 f = 60.0     # Frequency (Hz)
 ω = 2 * π * f # Angular frequency
+ω₀ = sqrt((1/(L * C) - (R^2/L^2)))
 
 # Creating the circuit 
 circuit = Circuit(C, R, L, V₀, ω)
@@ -20,3 +21,5 @@ function circuit_ode(du, u, p, t)
 end
 
 solve_ode_sin(circuit_ode, circuit, ε, 0.1)
+println("Ressonance frequency:", ω₀) 
+resonance_sin(circuit)
