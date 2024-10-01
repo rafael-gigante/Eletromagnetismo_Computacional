@@ -11,6 +11,7 @@ def initialize_V_box(V1, V2, N):
     """
     # Create an initial guess for the potential (N x N grid)
     V = np.zeros((N, N))
+    ρ = np.zeros((N, N))
 
     # Boundary conditions:
     # For the sides with potentials
@@ -30,7 +31,7 @@ def initialize_V_box(V1, V2, N):
             V[0, i] = V[0, i-1] - dV
             V[N-1, i] = V[N-1, i-1] - dV
 
-    return V
+    return V, ρ
 
 def initialize_V_capacitor(V1, V2, N):
     """
@@ -42,6 +43,7 @@ def initialize_V_capacitor(V1, V2, N):
     """
     # Create an initial guess for the potential (N x N grid)
     V = np.zeros((N, N))
+    ρ = np.zeros((N, N))
 
     plate_begin = int(3*(N-1)/10)
     plate_end = int(7*(N-1)/10)
@@ -51,4 +53,20 @@ def initialize_V_capacitor(V1, V2, N):
     V[plate_begin:plate_end, first_third] = V1
     V[plate_begin:plate_end, second_third] = V2
 
-    return V
+    return V, ρ
+
+def initialize_V_box_charge(N):
+    """
+    Initialize an electric potential of a capacitor with the plates having potentials V1 and V2.
+    The potential grid has dimensions N x N.
+
+    Returns:
+    - `V`: Array with the proper boundary for the specified problem
+    """
+    # Create an initial guess for the potential (N x N x N grid)
+    V = np.zeros((N, N, N))
+    ρ = np.zeros((N, N, N))
+
+    zero = int((N-1)/2) + 1
+    ρ[zero, zero, zero] = 1
+    return V, ρ

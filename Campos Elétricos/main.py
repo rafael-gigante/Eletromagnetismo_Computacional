@@ -10,12 +10,33 @@ Lx = 2.0
 Ly = 2.0
 
 # Initialize the potential box
-V = PotentialInitializer.initialize_V_capacitor(V1, V2, N)
+V, ρ = PotentialInitializer.initialize_V_box_charge(N)
 
-# Solve using Jacobi method
-V_final = PotentialSolver.laplace_calculate(V)
+dim = len(V.shape)
 
-# Plot results
-PotentialPlots.equipotential_lines(V_final, Lx, Ly)
-PotentialPlots.potential_surface(V_final, Lx, Ly)
-PotentialPlots.electric_field(V_final, Lx, Ly)
+if dim == 2:
+    # Solve using Jacobi method
+    V_final = PotentialSolver.laplace_calculate(V, ρ)
+
+    # Plot results
+    PotentialPlots.equipotential_lines(V_final, Lx, Ly)
+    PotentialPlots.potential_surface(V_final, Lx, Ly)
+    PotentialPlots.electric_field(V_final, Lx, Ly)
+elif dim ==3:
+    for _ in range(100):
+        V_new, ΔV = PotentialSolver.update_V(V, ρ)
+        V, ΔV = PotentialSolver.update_V(V_new, ρ)
+    V_final = V
+
+    z0 = int((N-1)/2) + 1
+    V_xy = V_final[:, :, z0]
+
+    # Plot results
+    PotentialPlots.equipotential_lines(V_xy, Lx, Ly)
+    PotentialPlots.potential_surface(V_xy, Lx, Ly)
+    PotentialPlots.electric_field(V_xy, Lx, Ly)
+
+
+        
+
+    
