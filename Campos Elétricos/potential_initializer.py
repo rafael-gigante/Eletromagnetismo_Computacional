@@ -8,6 +8,7 @@ def initialize_V_box(V1, V2, N):
 
     Returns:
     - `V`: Array with the proper boundary for the specified problem
+    - `ρ`: Array with the charge distribution for the specified problem
     """
     # Create an initial guess for the potential (N x N grid)
     V = np.zeros((N, N))
@@ -40,6 +41,7 @@ def initialize_V_capacitor(V1, V2, N):
 
     Returns:
     - `V`: Array with the proper boundary for the specified problem
+    - `ρ`: Array with the charge distribution for the specified problem
     """
     # Create an initial guess for the potential (N x N grid)
     V = np.zeros((N, N))
@@ -57,11 +59,12 @@ def initialize_V_capacitor(V1, V2, N):
 
 def initialize_V_box_charge(N):
     """
-    Initialize an electric potential of a capacitor with the plates having potentials V1 and V2.
-    The potential grid has dimensions N x N.
+    Initialize an electric potential of a cubic box and a point charge in the center.
+    The potential grid and the charge grid has dimensions N x N x N.
 
     Returns:
     - `V`: Array with the proper boundary for the specified problem
+    - `ρ`: Array with the charge distribution for the specified problem
     """
     # Create an initial guess for the potential (N x N x N grid)
     V = np.zeros((N, N, N))
