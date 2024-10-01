@@ -17,24 +17,25 @@ def equipotential_lines(V, Lx, Ly):
 
     # Plot equipotential lines with color fill
     plt.figure()
-    plt.contourf(x, y, V, cmap='jet', alpha=0.8)
+    levels = np.linspace(V.min(), V.max(), 500)
+    plt.contourf(x, y, V, levels=levels, cmap=cm.jet, alpha=0.8)
     plt.title(r'Equipotential Lines')
     plt.xlabel(r'$x$')
     plt.ylabel(r'$y$')
-    plt.xlim([x.min() - 0.25, x.max() + 0.25])
-    plt.ylim([y.min() - 0.25, y.max() + 0.25])
+    plt.xlim([x.min(), x.max()])
+    plt.ylim([y.min(), y.max()])
     plt.colorbar(label='Potential (V)')
     plt.savefig("Campos Elétricos/figures/equipotential_lines1.png")
     plt.close()
 
     # Plot equipotential lines without color fill
     plt.figure()
-    plt.contour(x, y, V, colors='black')
+    plt.contour(x, y, V, levels=np.linspace(V.min(), V.max(), 50) ,colors='black')
     plt.title(r'Equipotential Lines')
     plt.xlabel(r'$x$')
     plt.ylabel(r'$y$')
-    plt.xlim([x.min() - 0.25, x.max() + 0.25])
-    plt.ylim([y.min() - 0.25, y.max() + 0.25])
+    plt.xlim([x.min(), x.max()])
+    plt.ylim([y.min(), y.max()])
     plt.savefig("Campos Elétricos/figures/equipotential_lines2.png")
     plt.close()
 
@@ -94,21 +95,23 @@ def electric_field(V, Lx, Ly):
     Ey = np.zeros_like(V)
 
     # Central differences to compute the gradient of V
-    Ex[:, 1:-1] = -(V[:, 2:] - V[:, :-2]) / (2 * dx)  # ∂V/∂x
-    Ey[1:-1, :] = -(V[2:, :] - V[:-2, :]) / (2 * dy)  # ∂V/∂y
+    Ex[:, 1:-1] = (-(V[:, 2:] - V[:, :-2]) / (2 * dx))  # ∂V/∂x
+    Ey[1:-1, :] = (-(V[2:, :] - V[:-2, :]) / (2 * dy))  # ∂V/∂y
 
     # Plot the potential as a heatmap
     plt.figure()
-    plt.contourf(X, Y, V, cmap='jet', alpha=0.8)
+    levels = np.linspace(V.min(), V.max(), 500)
+    plt.contourf(X, Y, V, levels=levels, cmap=cm.jet, alpha=0.8)
     plt.colorbar(label='Potential (V)')
 
     # Plot the electric field vectors as a quiver plot
-    plt.quiver(X, Y, Ex, Ey, color='black')
+    n=2
+    plt.quiver(X[::n, ::n], Y[::n, ::n], Ex[::n, ::n], Ey[::n, ::n], color='black')
 
     plt.title('Electric Field and Potential')
     plt.xlabel('x')
     plt.ylabel('y')
-    plt.xlim([x.min() - 0.25, x.max() + 0.25])
-    plt.ylim([y.min() - 0.25, y.max() + 0.25])
+    plt.xlim([x.min(), x.max()])
+    plt.ylim([y.min() , y.max()])
     
     plt.savefig('Campos Elétricos/figures/electric_field.png')

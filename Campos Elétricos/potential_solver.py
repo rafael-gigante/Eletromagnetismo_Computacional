@@ -1,6 +1,6 @@
 import numpy as np
 
-def update_V_Jacobi(V):
+def update_V(V):
     """
     Function that receives a potential V and aplies the Jacobi method to it
     and calculates the absolute difference between the new and old potentials.
@@ -12,7 +12,7 @@ def update_V_Jacobi(V):
         
     # Total (cumulative) change in V during this update loop
     ΔV = 0
-     # Dimension of the potential
+    # Dimension of the potential
     dim = len(V.shape)
 
     # Number of sites along a direction
@@ -23,15 +23,16 @@ def update_V_Jacobi(V):
         V_new = np.copy(V)
         for i in range(1, N-1):
             for j in range(1, N-1):
-                V_new[i, j] = (V[i+1, j] + V[i-1, j] +
-                               V[i, j+1] + V[i, j-1]) / 4
-                ΔV += abs(V_new[i, j] - V[i, j])
+                if (abs(V[i, j]) != 1):
+                    V_new[i, j] = (V[i+1, j] + V[i-1, j] +
+                                V[i, j+1] + V[i, j-1]) / 4
+                    ΔV += abs(V_new[i, j] - V[i, j])
 
     return V_new, ΔV
 
-def laplace_calculate_Jacobi(V):
+def laplace_calculate(V):
     """
-    Function that aplies the Jacobi relaxation method to a initial potential V
+    Function that aplies the relaxation method to a initial potential V
     until the new potential is within the tolerance range.
 
     Returns:
@@ -44,12 +45,12 @@ def laplace_calculate_Jacobi(V):
 
     # Perform 10 iterations initially
     for _ in range(10):
-        V_new, ΔV = update_V_Jacobi(V)
-        V, ΔV = update_V_Jacobi(V_new)
+        V_new, ΔV = update_V(V)
+        V, ΔV = update_V(V_new)
 
     # Continue iterating until ΔV is less than ε
     while ΔV < ε:
-        V_new, ΔV = update_V_Jacobi(V)
-        V, ΔV = update_V_Jacobi(V_new)
+        V_new, ΔV = update_V(V)
+        V, ΔV = update_V(V_new)
 
     return V
